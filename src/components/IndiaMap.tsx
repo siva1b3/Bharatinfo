@@ -27,9 +27,9 @@ const IndiaMap = () => {
   const [tooltipContent, setTooltipContent] = useState("");
 
   return (
-    <div className="flex items-center justify-center h-screen bg-background overflow-hidden">
+    <div className="flex items-center justify-center h-screen bg-background overflow-hidden p-0 m-0">
       <div
-        className="w-full max-w-3xl h-full"
+        className="w-auto h-full"
         data-tooltip-id="india-tooltip"
         data-tooltip-content={tooltipContent}
       >
