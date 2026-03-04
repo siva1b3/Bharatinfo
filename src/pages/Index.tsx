@@ -1,7 +1,9 @@
 // Update this page (the content is just a fallback if you fail to update the page)
 
+import IndiaMap from "@/components/IndiaMap";
+
 const Index = () => {
-  return <div className="min-h-screen bg-background" />;
+  return <IndiaMap />;
 };
 
 export default Index;
