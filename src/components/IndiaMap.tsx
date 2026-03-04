@@ -27,12 +27,9 @@ const IndiaMap = () => {
   const [tooltipContent, setTooltipContent] = useState("");
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-      <h1 className="text-3xl font-bold text-foreground mb-6 tracking-tight">
-        India
-      </h1>
+    <div className="flex items-center justify-center h-screen bg-background overflow-hidden">
       <div
-        className="w-full max-w-3xl rounded-xl border border-border bg-card shadow-lg overflow-hidden"
+        className="w-full max-w-3xl h-full"
         data-tooltip-id="india-tooltip"
         data-tooltip-content={tooltipContent}
       >
@@ -43,20 +40,22 @@ const IndiaMap = () => {
             center: [82, 22],
           }}
           width={700}
-          height={750}
-          style={{ width: "100%", height: "auto" }}
+          height={850}
+          style={{ width: "100%", height: "100%" }}
         >
           <ZoomableGroup>
             <Geographies geography={INDIA_TOPO_URL}>
               {({ geographies }) =>
                 geographies.map((geo) => {
                   const stateName = geo.properties.st_nm || "Unknown";
+                  const districtName = geo.properties.district || geo.properties.dt_nm || geo.properties.DISTRICT || "";
+                  const label = districtName ? `${districtName}, ${stateName}` : stateName;
                   const hue = getStateColor(stateName);
                   return (
                     <Geography
                       key={geo.rsmKey}
                       geography={geo}
-                      onMouseEnter={() => setTooltipContent(stateName)}
+                      onMouseEnter={() => setTooltipContent(label)}
                       onMouseLeave={() => setTooltipContent("")}
                       style={{
                         default: {
