@@ -95,8 +95,8 @@ const IndiaMap = () => {
         </div>
       </div>
 
-      {/* Center: Map */}
-      <div className="relative h-full flex-shrink-0">
+      {/* Center: Map - takes all remaining space */}
+      <div className="relative h-full flex-1 min-w-0 flex items-center justify-center overflow-hidden">
         {position.zoom !== 1 && (
           <button
             onClick={handleReset}
