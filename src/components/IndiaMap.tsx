@@ -10,7 +10,6 @@ import { Tooltip } from "react-tooltip";
 
 const INDIA_TOPO_URL = "/india-topo.json";
 
-// Generate a consistent color for each state based on its name
 const stateColorMap = new Map<string, string>();
 const hueStep = 23;
 let hueIndex = 0;
@@ -24,9 +23,29 @@ const getStateColor = (stateName: string) => {
   return stateColorMap.get(stateName)!;
 };
 
+// Static sample data for the right panel table
+const sampleConstituencies = [
+  { name: "Constituency 1", type: "General" },
+  { name: "Constituency 2", type: "SC" },
+  { name: "Constituency 3", type: "General" },
+  { name: "Constituency 4", type: "ST" },
+  { name: "Constituency 5", type: "General" },
+  { name: "Constituency 6", type: "SC" },
+  { name: "Constituency 7", type: "General" },
+  { name: "Constituency 8", type: "General" },
+  { name: "Constituency 9", type: "ST" },
+  { name: "Constituency 10", type: "General" },
+  { name: "Constituency 11", type: "SC" },
+  { name: "Constituency 12", type: "General" },
+  { name: "Constituency 13", type: "General" },
+  { name: "Constituency 14", type: "ST" },
+  { name: "Constituency 15", type: "General" },
+];
+
 const IndiaMap = () => {
   const [tooltipContent, setTooltipContent] = useState("");
   const [position, setPosition] = useState<{ coordinates: [number, number]; zoom: number }>({ coordinates: [82, 22], zoom: 1 });
+  const [selectedDistrict, setSelectedDistrict] = useState<{ district: string; state: string } | null>(null);
 
   const handleReset = useCallback(() => {
     setPosition({ coordinates: [82, 22], zoom: 1 });
@@ -36,83 +55,135 @@ const IndiaMap = () => {
     setPosition(pos);
   }, []);
 
+  const handleDoubleClick = useCallback((geo: any) => {
+    const stateName = geo.properties.st_nm || "Unknown";
+    const districtName = geo.properties.district || geo.properties.dt_nm || geo.properties.DISTRICT || stateName;
+    setSelectedDistrict({ district: districtName, state: stateName });
+  }, []);
+
   return (
-    <div className="relative flex items-center justify-center h-screen bg-background overflow-hidden p-0 m-0">
-      {position.zoom !== 1 && (
-        <button
-          onClick={handleReset}
-          className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border shadow-md hover:bg-accent transition-colors text-sm font-medium"
-        >
-          <RotateCcw className="w-4 h-4" />
-          Fit to screen
-        </button>
-      )}
-      <div
-        className="w-auto h-full"
-        data-tooltip-id="india-tooltip"
-        data-tooltip-content={tooltipContent}
-      >
-        <ComposableMap
-          projection="geoMercator"
-          projectionConfig={{
-            scale: 1000,
-            center: [82, 22],
-          }}
-          width={700}
-          height={850}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <ZoomableGroup
-            center={position.coordinates}
-            zoom={position.zoom}
-            onMoveEnd={handleMoveEnd}
-            filterZoomEvent={(evt) => {
-              // Only allow wheel/scroll zoom, disable double-click zoom
-              return evt.type === "wheel";
-            }}
+    <div className="flex h-screen bg-background overflow-hidden">
+      {/* Left empty space */}
+      <div className="flex-1" />
+
+      {/* Center: Map */}
+      <div className="relative h-full flex-shrink-0">
+        {position.zoom !== 1 && (
+          <button
+            onClick={handleReset}
+            className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border shadow-md hover:bg-accent transition-colors text-sm font-medium"
           >
-            <Geographies geography={INDIA_TOPO_URL}>
-              {({ geographies }) =>
-                geographies.map((geo) => {
-                  const stateName = geo.properties.st_nm || "Unknown";
-                  const districtName = geo.properties.district || geo.properties.dt_nm || geo.properties.DISTRICT || "";
-                  const label = districtName ? `${districtName}, ${stateName}` : stateName;
-                  const hue = getStateColor(stateName);
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      onMouseEnter={() => setTooltipContent(label)}
-                      onMouseLeave={() => setTooltipContent("")}
-                      style={{
-                        default: {
-                          fill: `hsl(${hue}, 45%, 72%)`,
-                          stroke: "hsl(var(--foreground) / 0.25)",
-                          strokeWidth: 0.3,
-                          outline: "none",
-                        },
-                        hover: {
-                          fill: `hsl(${hue}, 60%, 55%)`,
-                          stroke: "hsl(var(--foreground) / 0.5)",
-                          strokeWidth: 0.6,
-                          outline: "none",
-                          cursor: "pointer",
-                        },
-                        pressed: {
-                          fill: `hsl(${hue}, 65%, 45%)`,
-                          stroke: "hsl(var(--foreground) / 0.5)",
-                          strokeWidth: 0.6,
-                          outline: "none",
-                        },
-                      }}
-                    />
-                  );
-                })
-              }
-            </Geographies>
-          </ZoomableGroup>
-        </ComposableMap>
+            <RotateCcw className="w-4 h-4" />
+            Fit to screen
+          </button>
+        )}
+        <div
+          className="h-full"
+          data-tooltip-id="india-tooltip"
+          data-tooltip-content={tooltipContent}
+        >
+          <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{
+              scale: 1000,
+              center: [82, 22],
+            }}
+            width={700}
+            height={850}
+            style={{ width: "auto", height: "100%" }}
+          >
+            <ZoomableGroup
+              center={position.coordinates}
+              zoom={position.zoom}
+              onMoveEnd={handleMoveEnd}
+              filterZoomEvent={(evt) => evt.type === "wheel"}
+            >
+              <Geographies geography={INDIA_TOPO_URL}>
+                {({ geographies }) =>
+                  geographies.map((geo) => {
+                    const stateName = geo.properties.st_nm || "Unknown";
+                    const districtName = geo.properties.district || geo.properties.dt_nm || geo.properties.DISTRICT || "";
+                    const label = districtName ? `${districtName}, ${stateName}` : stateName;
+                    const hue = getStateColor(stateName);
+                    const isSelected = selectedDistrict &&
+                      selectedDistrict.district === (districtName || stateName) &&
+                      selectedDistrict.state === stateName;
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        onMouseEnter={() => setTooltipContent(label)}
+                        onMouseLeave={() => setTooltipContent("")}
+                        onDoubleClick={() => handleDoubleClick(geo)}
+                        style={{
+                          default: {
+                            fill: isSelected ? `hsl(${hue}, 70%, 45%)` : `hsl(${hue}, 45%, 72%)`,
+                            stroke: isSelected ? "hsl(var(--foreground))" : "hsl(var(--foreground) / 0.25)",
+                            strokeWidth: isSelected ? 0.8 : 0.3,
+                            outline: "none",
+                          },
+                          hover: {
+                            fill: `hsl(${hue}, 60%, 55%)`,
+                            stroke: "hsl(var(--foreground) / 0.5)",
+                            strokeWidth: 0.6,
+                            outline: "none",
+                            cursor: "pointer",
+                          },
+                          pressed: {
+                            fill: `hsl(${hue}, 65%, 45%)`,
+                            stroke: "hsl(var(--foreground) / 0.5)",
+                            strokeWidth: 0.6,
+                            outline: "none",
+                          },
+                        }}
+                      />
+                    );
+                  })
+                }
+              </Geographies>
+            </ZoomableGroup>
+          </ComposableMap>
+        </div>
       </div>
+
+      {/* Right panel: Table */}
+      <div className="w-80 flex-shrink-0 h-full flex flex-col border-l border-border bg-card">
+        <div className="p-4 border-b border-border">
+          <h2 className="text-sm font-semibold text-foreground">
+            {selectedDistrict
+              ? `${selectedDistrict.district}, ${selectedDistrict.state}`
+              : "Double-click a district"}
+          </h2>
+          {selectedDistrict && (
+            <p className="text-xs text-muted-foreground mt-1">State Assembly Constituencies</p>
+          )}
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          {selectedDistrict ? (
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-muted">
+                <tr>
+                  <th className="text-left px-4 py-2 font-medium text-muted-foreground">Name</th>
+                  <th className="text-left px-4 py-2 font-medium text-muted-foreground">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sampleConstituencies.map((c, i) => (
+                  <tr key={i} className="border-b border-border hover:bg-muted/50 transition-colors">
+                    <td className="px-4 py-2 text-foreground">{c.name}</td>
+                    <td className="px-4 py-2 text-foreground">{c.type}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+              No district selected
+            </div>
+          )}
+        </div>
+      </div>
+
       <Tooltip
         id="india-tooltip"
         className="!bg-popover !text-popover-foreground !border !border-border !rounded-lg !px-3 !py-1.5 !text-sm !font-medium !shadow-md !z-50"
