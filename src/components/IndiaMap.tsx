@@ -1,10 +1,11 @@
-import { useState, useMemo, memo } from "react";
+import { useState, useCallback, memo } from "react";
 import {
   ComposableMap,
   Geographies,
   Geography,
   ZoomableGroup,
 } from "react-simple-maps";
+import { RotateCcw } from "lucide-react";
 import { Tooltip } from "react-tooltip";
 
 const INDIA_TOPO_URL = "/india-topo.json";
@@ -25,9 +26,27 @@ const getStateColor = (stateName: string) => {
 
 const IndiaMap = () => {
   const [tooltipContent, setTooltipContent] = useState("");
+  const [position, setPosition] = useState<{ coordinates: [number, number]; zoom: number }>({ coordinates: [82, 22], zoom: 1 });
+
+  const handleReset = useCallback(() => {
+    setPosition({ coordinates: [82, 22], zoom: 1 });
+  }, []);
+
+  const handleMoveEnd = useCallback((pos: { coordinates: [number, number]; zoom: number }) => {
+    setPosition(pos);
+  }, []);
 
   return (
-    <div className="flex items-center justify-center h-screen bg-background overflow-hidden p-0 m-0">
+    <div className="relative flex items-center justify-center h-screen bg-background overflow-hidden p-0 m-0">
+      {position.zoom !== 1 && (
+        <button
+          onClick={handleReset}
+          className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border shadow-md hover:bg-accent transition-colors text-sm font-medium"
+        >
+          <RotateCcw className="w-4 h-4" />
+          Fit to screen
+        </button>
+      )}
       <div
         className="w-auto h-full"
         data-tooltip-id="india-tooltip"
@@ -43,7 +62,11 @@ const IndiaMap = () => {
           height={850}
           style={{ width: "100%", height: "100%" }}
         >
-          <ZoomableGroup>
+          <ZoomableGroup
+            center={position.coordinates}
+            zoom={position.zoom}
+            onMoveEnd={handleMoveEnd}
+          >
             <Geographies geography={INDIA_TOPO_URL}>
               {({ geographies }) =>
                 geographies.map((geo) => {
