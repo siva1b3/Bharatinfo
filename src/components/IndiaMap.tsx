@@ -1,10 +1,11 @@
-import { useState, useMemo, memo } from "react";
+import { useState, useCallback, memo } from "react";
 import {
   ComposableMap,
   Geographies,
   Geography,
   ZoomableGroup,
 } from "react-simple-maps";
+import { RotateCcw } from "lucide-react";
 import { Tooltip } from "react-tooltip";
 
 const INDIA_TOPO_URL = "/india-topo.json";
