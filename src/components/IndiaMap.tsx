@@ -24,23 +24,10 @@ const getStateColor = (stateName: string) => {
 };
 
 // Static sample data for the right panel table
-const sampleConstituencies = [
-  { name: "Constituency 1", type: "General" },
-  { name: "Constituency 2", type: "SC" },
-  { name: "Constituency 3", type: "General" },
-  { name: "Constituency 4", type: "ST" },
-  { name: "Constituency 5", type: "General" },
-  { name: "Constituency 6", type: "SC" },
-  { name: "Constituency 7", type: "General" },
-  { name: "Constituency 8", type: "General" },
-  { name: "Constituency 9", type: "ST" },
-  { name: "Constituency 10", type: "General" },
-  { name: "Constituency 11", type: "SC" },
-  { name: "Constituency 12", type: "General" },
-  { name: "Constituency 13", type: "General" },
-  { name: "Constituency 14", type: "ST" },
-  { name: "Constituency 15", type: "General" },
-];
+const sampleConstituencies = Array.from({ length: 50 }, (_, i) => ({
+  name: `Constituency ${i + 1}`,
+  type: ["General", "SC", "ST", "General", "General"][i % 5],
+}));
 
 const IndiaMap = () => {
   const [tooltipContent, setTooltipContent] = useState("");
