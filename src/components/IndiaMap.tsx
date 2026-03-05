@@ -26,6 +26,15 @@ const getStateColor = (stateName: string) => {
 
 const IndiaMap = () => {
   const [tooltipContent, setTooltipContent] = useState("");
+  const [position, setPosition] = useState<{ coordinates: [number, number]; zoom: number }>({ coordinates: [82, 22], zoom: 1 });
+
+  const handleReset = useCallback(() => {
+    setPosition({ coordinates: [82, 22], zoom: 1 });
+  }, []);
+
+  const handleMoveEnd = useCallback((pos: { coordinates: [number, number]; zoom: number }) => {
+    setPosition(pos);
+  }, []);
 
   return (
     <div className="flex items-center justify-center h-screen bg-background overflow-hidden p-0 m-0">
