@@ -66,6 +66,10 @@ const IndiaMap = () => {
             center={position.coordinates}
             zoom={position.zoom}
             onMoveEnd={handleMoveEnd}
+            filterZoomEvent={(evt) => {
+              // Only allow wheel/scroll zoom, disable double-click zoom
+              return evt.type === "wheel";
+            }}
           >
             <Geographies geography={INDIA_TOPO_URL}>
               {({ geographies }) =>
