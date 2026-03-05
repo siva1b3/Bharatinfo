@@ -61,8 +61,39 @@ const IndiaMap = () => {
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
-      {/* Left empty space */}
-      <div className="flex-1" />
+      {/* Left panel: Timeline */}
+      <div className="w-80 flex-shrink-0 h-full flex flex-col border-r border-border bg-card">
+        <div className="p-4 border-b border-border">
+          <h2 className="text-sm font-semibold text-foreground">
+            {selectedDistrict ? `Timeline: ${selectedDistrict.district}` : "Double-click a district"}
+          </h2>
+        </div>
+        <div className="flex-1 overflow-y-auto p-4">
+          {selectedDistrict ? (
+            <div className="relative pl-6">
+              <div className="absolute left-2 top-0 bottom-0 w-px bg-border" />
+              {sampleTimeline.map((item, i) => (
+                <div key={i} className="relative mb-6 last:mb-0">
+                  <div className="absolute -left-[18px] top-1 w-3 h-3 rounded-full bg-primary border-2 border-background" />
+                  <p className="text-xs text-muted-foreground mb-1">{item.date} · {item.location}</p>
+                  <h3 className="text-sm font-medium text-foreground mb-1">{item.title}</h3>
+                  <p className="text-xs text-muted-foreground mb-2">{item.description}</p>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-24 object-cover rounded-md border border-border"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+              No district selected
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Center: Map */}
       <div className="relative h-full flex-shrink-0">
