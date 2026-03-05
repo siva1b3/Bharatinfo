@@ -29,6 +29,17 @@ const sampleConstituencies = Array.from({ length: 50 }, (_, i) => ({
   type: ["General", "SC", "ST", "General", "General"][i % 5],
 }));
 
+const sampleTimeline = [
+  { date: "15 Mar 2024", title: "District Survey Completed", description: "Census and demographic survey finalized for all blocks.", location: "Block HQ", image: "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=200&h=120&fit=crop" },
+  { date: "02 Feb 2024", title: "New School Inaugurated", description: "Government primary school opened in rural area.", location: "Village Center", image: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=200&h=120&fit=crop" },
+  { date: "18 Jan 2024", title: "Road Construction Started", description: "National highway expansion project phase 2 begins.", location: "NH-44 Junction", image: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=200&h=120&fit=crop" },
+  { date: "05 Dec 2023", title: "Health Camp Organized", description: "Free medical checkup for 500+ villagers conducted.", location: "PHC Compound", image: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=200&h=120&fit=crop" },
+  { date: "20 Nov 2023", title: "Panchayat Election Results", description: "Local body election results declared for all wards.", location: "Collectorate", image: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=200&h=120&fit=crop" },
+  { date: "10 Oct 2023", title: "Water Project Approved", description: "Jal Jeevan Mission pipeline project sanctioned.", location: "Taluk Office", image: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=200&h=120&fit=crop" },
+  { date: "01 Sep 2023", title: "Crop Damage Assessment", description: "Flood damage assessment completed for kharif season.", location: "Agricultural Office", image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=200&h=120&fit=crop" },
+  { date: "15 Aug 2023", title: "Independence Day Celebration", description: "Flag hoisting and cultural programs across the district.", location: "District Stadium", image: "https://images.unsplash.com/photo-1532375810709-75b1da00537c?w=200&h=120&fit=crop" },
+];
+
 const IndiaMap = () => {
   const [tooltipContent, setTooltipContent] = useState("");
   const [position, setPosition] = useState<{ coordinates: [number, number]; zoom: number }>({ coordinates: [82, 22], zoom: 1 });
