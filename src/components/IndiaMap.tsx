@@ -6,7 +6,7 @@ import {
   ZoomableGroup,
 } from "react-simple-maps";
 import { RotateCcw } from "lucide-react";
-import { Tooltip } from "react-tooltip";
+
 
 const INDIA_TOPO_URL = "/india-topo.json";
 
