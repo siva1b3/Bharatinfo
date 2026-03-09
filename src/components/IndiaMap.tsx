@@ -107,7 +107,7 @@ const IndiaMap = () => {
         {position.zoom !== 1 && (
           <button
             onClick={handleReset}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border shadow-md hover:bg-accent transition-colors text-sm font-medium"
+            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border shadow-md hover:bg-accent transition-colors text-sm font-medium"
           >
             <RotateCcw className="w-4 h-4" />
             Fit to screen
