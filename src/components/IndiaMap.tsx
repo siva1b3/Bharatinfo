@@ -96,21 +96,24 @@ const IndiaMap = () => {
       </div>
 
       {/* Center: Map - takes all remaining space */}
-      <div className="relative h-full flex-1 min-w-0 flex items-center justify-center overflow-hidden">
+      <div className="relative h-full flex-1 min-w-0 flex flex-col overflow-hidden">
+        {/* Floating tooltip at center top */}
+        {tooltipContent && (
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 rounded-lg bg-popover text-popover-foreground border border-border shadow-md text-sm font-medium pointer-events-none">
+            {tooltipContent}
+          </div>
+        )}
+        {/* Floating reset button at center bottom */}
         {position.zoom !== 1 && (
           <button
             onClick={handleReset}
-            className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border shadow-md hover:bg-accent transition-colors text-sm font-medium"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-popover text-popover-foreground border border-border shadow-md hover:bg-accent transition-colors text-sm font-medium"
           >
             <RotateCcw className="w-4 h-4" />
             Fit to screen
           </button>
         )}
-        <div
-          className="h-full"
-          data-tooltip-id="india-tooltip"
-          data-tooltip-content={tooltipContent}
-        >
+        <div className="flex-1 w-full h-full">
           <ComposableMap
             projection="geoMercator"
             projectionConfig={{
@@ -119,7 +122,7 @@ const IndiaMap = () => {
             }}
             width={700}
             height={850}
-            style={{ width: "auto", height: "100%" }}
+            style={{ width: "100%", height: "100%" }}
           >
             <ZoomableGroup
               center={position.coordinates}
