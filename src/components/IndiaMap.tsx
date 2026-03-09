@@ -62,7 +62,7 @@ const IndiaMap = () => {
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Left panel: Timeline */}
-      <div className="w-80 flex-shrink-0 h-full flex flex-col border-r border-border bg-card">
+      <div className="w-[640px] flex-shrink-0 h-full flex flex-col border-r border-border bg-card">
         <div className="p-4 border-b border-border">
           <h2 className="text-sm font-semibold text-foreground">
             {selectedDistrict ? `Timeline: ${selectedDistrict.district}` : "Double-click a district"}
