@@ -216,10 +216,6 @@ const IndiaMap = () => {
         </div>
       </div>
 
-      <Tooltip
-        id="india-tooltip"
-        className="!bg-popover !text-popover-foreground !border !border-border !rounded-lg !px-3 !py-1.5 !text-sm !font-medium !shadow-md !z-50"
-      />
     </div>
   );
 };
